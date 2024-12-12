@@ -1,0 +1,67 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    restart: always
+    networks:
+      - frontend
+
+  redis:
+    image: redis:alpine
+    expose:
+      - 6379
+    depends_on:
+      - nginx
+    networks:
+      - backend
+      - frontend
+
+  python-app:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    networks:
+      - backend
+      - frontend
+
+  mongodb1:
+    image: mongo:5.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    depends_on:
+      - python-app
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo1_data:/data/db
+    networks:
+      - backend
+      - frontend
+
+  mongodb2:
+    image: mongo:5.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    depends_on:
+      - python-app
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo2_data:/data/db
+    networks:
+      - backend
+      - frontend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  mongo1_data:
+  mongo2_data:
