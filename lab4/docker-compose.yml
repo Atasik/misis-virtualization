@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  jupyterhub:
+    image: atasik/jupyterhub
+    volumes:
+      - data:/srv/jupyterhub
+
+volumes:
+  data:
