@@ -4,7 +4,7 @@ services:
   jupyterhub:
     image: atasik/jupyterhub
     volumes:
-      - data_test:/srv/jupyterhub
+      - data:/srv/jupyterhub
 
 volumes:
-  data_test:
+  data:
